@@ -20,7 +20,22 @@ namespace WordPad
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            if (!string.IsNullOrEmpty(richTextBox1.Text))
+            {
+                var result = MessageBox.Show("Do you want to save changes?", "Confirm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (result == DialogResult.Cancel)
+                {
+                    return;
+                }
+                else if (result == DialogResult.Yes)
+                {
+                    saveToolStripMenuItem_Click(sender, e); 
+                }
+            }
+            richTextBox1.Clear();
+            currentFilePath = string.Empty;
+            this.Text = "My Editor - New Document";
+            richTextBox1.Focus();
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -38,11 +53,6 @@ namespace WordPad
                     richTextBox1.LoadFile(ofd.FileName, RichTextBoxStreamType.RichText);
                 }
             }
-        }
-
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-
         }
 
         private string currentFilePath = string.Empty; // Biến giữ đường dẫn file đang mở/lưu
@@ -109,6 +119,11 @@ namespace WordPad
             {
                 richTextBox1.SelectionColor = cd.Color;
             }
+        }
+
+        private void pageSetupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
