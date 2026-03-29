@@ -282,5 +282,57 @@ namespace WordPad
             richTextBox1.SelectAll();
             richTextBox1.Focus();
         }
+
+        private void leftToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.SelectionAlignment = HorizontalAlignment.Left;
+        }
+        
+        private void boldToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Font f = richTextBox1.SelectionFont;
+            richTextBox1.SelectionFont = new Font(f, f.Style ^ FontStyle.Bold);
+        }
+
+        private void italicToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Font f = richTextBox1.SelectionFont;
+            richTextBox1.SelectionFont = new Font(f, f.Style ^ FontStyle.Italic);
+        }
+
+        private void underlineToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Font f = richTextBox1.SelectionFont;
+            richTextBox1.SelectionFont = new Font(f, f.Style ^ FontStyle.Underline);
+        }
+
+        private void centerToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            richTextBox1.SelectionAlignment = HorizontalAlignment.Center;
+        }
+
+        private void rightToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            richTextBox1.SelectionAlignment = HorizontalAlignment.Right;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pageColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDialog = new ColorDialog();
+            if (colorDialog.ShowDialog() == DialogResult.OK)
+            {
+                richTextBox1.BackColor = colorDialog.Color;
+            }
+        }
+
+        private void normalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
