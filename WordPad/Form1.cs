@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace WordPad
 {
     public partial class Form1 : Form
@@ -333,6 +334,64 @@ namespace WordPad
         private void normalToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void editToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (richTextBox1.SelectedText != "")
+            {
+                Clipboard.SetText(richTextBox1.SelectedText);
+            }
+        }
+
+        private void toolStripButton5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void alignToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripButton9_Click(object sender, EventArgs e)
+        {
+            Font f = richTextBox1.SelectionFont;
+            richTextBox1.SelectionFont = new Font(f, f.Style ^ FontStyle.Bold);
+        }
+
+        private void toolStripButton10_Click(object sender, EventArgs e)
+        {
+            Font f = richTextBox1.SelectionFont;
+            richTextBox1.SelectionFont = new Font(f, f.Style ^ FontStyle.Underline);
+        }
+
+        private void toolStripButton11_Click(object sender, EventArgs e)
+        {
+            Font f = richTextBox1.SelectionFont;
+            richTextBox1.SelectionFont = new Font(f, f.Style ^ FontStyle.Italic);
+        }
+
+        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (richTextBox1.SelectedText != "")
+            {
+                Clipboard.SetText(richTextBox1.SelectedText);
+                richTextBox1.SelectedText = ""; // xóa đoạn đã chọn
+            }
+        }
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Clipboard.ContainsText())
+            {
+                richTextBox1.SelectedText = Clipboard.GetText();
+            }
         }
     }
 }
