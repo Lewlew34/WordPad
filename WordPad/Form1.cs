@@ -349,11 +349,6 @@ namespace WordPad
             }
         }
 
-        private void toolStripButton5_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void alignToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
