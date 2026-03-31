@@ -19,6 +19,8 @@ namespace WordPad
             InitializeComponent();
             // Ensure PrintPage event is hooked so printing uses our handler
             this.printDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument1_PrintPage);
+            // Update status label when caret/selection changes
+            this.richTextBox1.SelectionChanged += new EventHandler(this.richTextBox1_SelectionChanged);
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -430,6 +432,52 @@ namespace WordPad
             if (!richTextBox1.CanRedo)
             {
                 richTextBox1.Redo();
+            }
+        }
+
+        private void toolStripStatusLabel1_Click(object sender, EventArgs e)
+        {
+            // Allow user to go to a specific line by clicking the status label
+            string input = Prompt("Nhập số dòng muốn đến:");
+            if (string.IsNullOrEmpty(input)) return;
+
+            if (int.TryParse(input, out int lineNumber))
+            {
+                // Lines in RichTextBox are zero-based
+                int lineIndex = lineNumber - 1;
+                if (lineIndex < 0) lineIndex = 0;
+                int totalLines = richTextBox1.Lines.Length;
+                if (lineIndex >= totalLines) lineIndex = totalLines - 1;
+
+                int charIndex = richTextBox1.GetFirstCharIndexFromLine(lineIndex);
+                if (charIndex >= 0)
+                {
+                    richTextBox1.SelectionStart = charIndex;
+                    richTextBox1.SelectionLength = 0;
+                    richTextBox1.ScrollToCaret();
+                    richTextBox1.Focus();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Số dòng không hợp lệ.", "Go To Line", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void richTextBox1_SelectionChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                int index = richTextBox1.SelectionStart;
+                int line = richTextBox1.GetLineFromCharIndex(index);
+                int col = index - richTextBox1.GetFirstCharIndexOfCurrentLine();
+                int selLength = richTextBox1.SelectionLength;
+                // Display 1-based line/column
+                this.toolStripStatusLabel1.Text = $"Ln {line + 1}, Col {col + 1} | Sel {selLength}";
+            }
+            catch
+            {
+                // ignore errors updating status
             }
         }
     }
