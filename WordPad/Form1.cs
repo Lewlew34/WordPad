@@ -17,6 +17,8 @@ namespace WordPad
         public Form1()
         {
             InitializeComponent();
+            // Ensure PrintPage event is hooked so printing uses our handler
+            this.printDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument1_PrintPage);
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -42,16 +44,31 @@ namespace WordPad
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var ofd = new OpenFileDialog();
-            ofd.Filter = "Text Files|*.txt|My Word|*.rft";
+            ofd.Filter = "Text files (*.txt)|*.txt|Rich Text Format (*.rtf)|*.rtf|All files (*.*)|*.*";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                if (ofd.FileName.EndsWith(".txt"))
+                string ext = Path.GetExtension(ofd.FileName)?.ToLowerInvariant();
+                try
                 {
-                    richTextBox1.LoadFile(ofd.FileName, RichTextBoxStreamType.PlainText);
+                    if (ext == ".txt")
+                    {
+                        richTextBox1.LoadFile(ofd.FileName, RichTextBoxStreamType.PlainText);
+                    }
+                    else if (ext == ".rtf")
+                    {
+                        richTextBox1.LoadFile(ofd.FileName, RichTextBoxStreamType.RichText);
+                    }
+                    else
+                    {
+                        richTextBox1.LoadFile(ofd.FileName, RichTextBoxStreamType.PlainText);
+                    }
+
+                    currentFilePath = ofd.FileName;
+                    this.Text = "My Editor - " + Path.GetFileName(currentFilePath);
                 }
-                else
+                catch (Exception ex)
                 {
-                    richTextBox1.LoadFile(ofd.FileName, RichTextBoxStreamType.RichText);
+                    MessageBox.Show("Error opening file: " + ex.Message, "Open File", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -85,7 +102,7 @@ namespace WordPad
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var sfd = new SaveFileDialog();
-            sfd.Filter = "Text Files|*.txt|My Word|*.rft";
+            sfd.Filter = "Text files (*.txt)|*.txt|Rich Text Format (*.rtf)|*.rtf|All files (*.*)|*.*";
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 currentFilePath = sfd.FileName;
@@ -248,7 +265,14 @@ namespace WordPad
             pd.Document = printDocument1;
             if (pd.ShowDialog() == DialogResult.OK)
             {
-                printDocument1.Print();
+                try
+                {
+                    printDocument1.Print();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error printing: " + ex.Message, "Print", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
