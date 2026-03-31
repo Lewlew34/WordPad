@@ -392,5 +392,21 @@ namespace WordPad
                 richTextBox1.SelectedText = Clipboard.GetText();
             }
         }
+
+        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (richTextBox1.CanUndo)
+            {
+                richTextBox1.Undo();
+            }
+        }
+
+        private void redoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!richTextBox1.CanRedo)
+            {
+                richTextBox1.Redo();
+            }
+        }
     }
 }
